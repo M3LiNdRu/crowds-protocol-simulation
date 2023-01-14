@@ -33,6 +33,7 @@ class CrowdsSimulation:
         broken_paths_left = self.broken_paths
 
         next_user = self.choose_forward()
+        #print(f"{user_id} -> {next_user.id}")               #<-- added print
 
         #keep forwarding while the message is not sent to the server
         self.output = ''
@@ -45,7 +46,8 @@ class CrowdsSimulation:
                     break
                 self.fix()
             next_user = self.choose_forward()
-            
+            #if next_user is not None:                           #<-- added condition
+                #print(f"{self.stack[-1].id} -> {next_user.id}") #<-- added print
             #The server is controlled by the adversary. Sending to the server causes a detection.
             if next_user is None:
                 self.detect(self.stack[-1])
@@ -85,7 +87,16 @@ class CrowdsSimulation:
             return random.choice(user.edges)
         else:
             #the message is sent to the server
+            #print(f'{user.id} -> server')                   #<-- added print
+            self.print_full_path()
             return None
+    
+    def print_full_path(self):
+        concat = ''
+        for n in self.stack:
+            concat += f'{n.id} -> '
+        concat += "server"
+        print(f'full path: {concat}')
 
 
 class User:
